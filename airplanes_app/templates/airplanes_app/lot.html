@@ -1,0 +1,58 @@
+{% load static %}
+<link rel="stylesheet" type="text/css" href="{% static 'airplanes_app/style.css' %}" />
+
+<form action="{% url 'logout' %}" method="POST">
+    {% csrf_token %}
+    <input type="submit" value="Wyloguj się"/>
+</form>
+<h3>
+    Wylot: {{lot.lotnisko_startowe}}, {{lot.czas_startu}}<br><br>
+    Lądowanie: {{lot.lotnisko_docelowe}}, {{lot.czas_ladowania}}<br><br>
+    {% if lot.pasazerowie.all|length > 0 %}
+        Lista pasażerów:
+        <select>
+            {% for pasazer in lot.pasazerowie.all %}
+                <li>{{pasazer.imie}} {{pasazer.nazwisko}}</li>
+                <option value="{{pasazer.id}}">{{pasazer.imie}} {{pasazer.nazwisko}}</option>
+            {% endfor %}
+        </select>
+    {% else %}
+        Nie ma jeszcze żadnych pasażerów
+    {% endif %}
+    <br><br>
+    Liczba wolnych miejsc: {{liczba_wolnych_miejsc}}
+</h2>
+<br>
+<div>
+    <form action="{% url 'lot' lot_id %}" method="POST">
+        {% csrf_token %}
+        Imię pasażera:<br>
+        <input type="text" name="imie" value={% if rejestracja != "powodzenie" %}{{imie}}{% endif %}><br><br>
+        Nazwisko pasażera:<br>
+        <input type="text" name="nazwisko" value={% if rejestracja != "powodzenie" %}{{nazwisko}}{% endif %}><br><br>
+        Liczba biletów:<br>
+        <input type="number" name="liczba_biletow" min="1" max="{{liczba_wolnych_miejsc}}" value={% if rejestracja == "niepowodzenie" %}{{liczba_biletow}}{% endif %}><br><br>
+        <input type="submit" value="Zarezerwuj bilety"/>
+    </form>
+</div>
+<br>
+{% if rejestracja == "powodzenie" %}
+    <h2>
+        Rejestracja biletów powiodła się!
+    </h2>
+{% endif %}
+{% if rejestracja == "niepowodzenie" %}
+    <h2>
+        Nie wypełniono wszystkich wymaganych pól!
+    </h2>
+{% endif %}
+{% if rejestracja == "brak_biletow" %}
+    <h2>
+        Nie ma już tylu wolnych miejsc!
+    </h2>
+{% endif %}
+<br>
+<form action="{% url 'strona_glowna' %}" method="POST">
+    {% csrf_token %}
+    <input type="submit" value="Powrót do strony głównej"/>
+</form>

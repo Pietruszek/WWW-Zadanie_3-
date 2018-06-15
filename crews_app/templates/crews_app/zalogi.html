@@ -1,0 +1,27 @@
+{% load static %}
+<link rel="stylesheet" type="text/css" href="{% static 'crews_app/zalogi.css' %}" />
+
+{% load static %}
+<script type="text/javascript"> window.CSRF_TOKEN = "{{ csrf_token }}"; </script>
+<script src="{% static 'crews_app/zalogi.js' %}"></script>
+
+<form action="{% url 'logout' %}" method="POST">
+    {% csrf_token %}
+    <input type="submit" value="Wyloguj się"/>
+</form>
+<form action="{% url 'strona_glowna' %}" method="POST">
+    {% csrf_token %}
+    <input type="submit" value="Powrót do strony głównej"/>
+</form>
+<h3>
+    Wybierz datę lotu:
+</h3>
+<div>
+    <form name="filtr_data">
+        <input type="date" name="data_lotu"><br><br>
+        <input type="button" onclick="stworz_tabele_lotow()" value="Szukaj"> 
+    </form>
+</div>
+<br>
+<div id='div_tabela_lotow'>
+</div>

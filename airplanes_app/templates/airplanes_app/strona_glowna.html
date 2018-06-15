@@ -1,0 +1,74 @@
+{% load static %}
+<link rel="stylesheet" type="text/css" href="{% static 'airplanes_app/style.css' %}" />
+
+<form action="{% url 'logout' %}" method="POST">
+    {% csrf_token %}
+    <input type="submit" value="Wyloguj się"/>
+</form>
+<h2>
+    Witamy na stronie rezerwacji lotów!
+</h2>
+<form action="{% url 'zalogi' %}" method="POST">
+    {% csrf_token %}
+    <input type="submit" value="Załogi"/>
+</form>
+<h3>
+    Wyszukaj lot
+</h3>
+<div>
+    <form action="{% url 'strona_glowna' %}" method="POST">
+        {% csrf_token %}
+        Z:<br>
+        <input type="text" name="lotnisko_startowe" value={{lotnisko_startowe}}><br><br>
+        Do:<br>
+        <input type="text" name="lotnisko_docelowe" value={{lotnisko_docelowe}}><br><br>
+        Data wylotu:<br>
+        <input type="date" name="data_lotu" value={{data_lotu}}><br><br>
+        <input type="submit" value="Szukaj"/>
+    </form>
+</div>
+<br>
+{% if bledna_data %}
+    <h4>
+        Wpisano błędną datę!
+    </h4>
+{% else %}
+    {% if lista_lotow %}
+        {% if lista_lotow|length > 0 %}
+            <table>
+                <tr>
+                    <th>
+                        Lotnisko startowe
+                    </th>
+                    <th>
+                        Lotnisko docelowe
+                    </th>
+                    <th>
+                        Czas wylotu
+                    </th>
+                    <th></th>
+                </tr>
+                {% for lot in lista_lotow %}
+                    <tr>
+                        <td>
+                            {{lot.lotnisko_startowe}}
+                        </td>
+                        <td>
+                            {{lot.lotnisko_docelowe}}
+                        </td>
+                        <td>
+                            {{lot.czas_startu}}
+                        </td>
+                        <td>
+                            <a href="{% url 'lot' lot.id %}">Zobacz szczegóły</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </table>
+        {% else %}
+            <h4>
+                Brak lotów spełniających kryteria wyszukiwania
+            </h4>
+        {% endif %}
+    {% endif %}
+{% endif %}

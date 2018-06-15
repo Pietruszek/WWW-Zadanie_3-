@@ -1,0 +1,28 @@
+body {
+    margin: 5%;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+tbody {
+    border-style: solid;
+    border-width: 1px;
+    border-color: #ebebeb;
+}
+
+th {
+    background-color: #ebebeb;
+    padding: 10px;
+}
+
+td {
+    padding: 10px;
+    border-top-style: solid;
+    border-bottom-style: solid;
+    border-width: 1px;
+    border-color: #ebebeb;
+    text-align: center;
+}
